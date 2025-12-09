@@ -1,0 +1,8 @@
+{
+    "name": "melmos-root",
+    "private": true,
+    "scripts": {
+        "install-modules": "cd frontend && npm install && cd ../backend && npm install",
+        "build": "cd frontend && npm install && npm run build"
+    }
+}
