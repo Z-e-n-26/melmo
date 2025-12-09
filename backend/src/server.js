@@ -20,13 +20,17 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/stock', stockRoutes);
 
-// Sync Database and Seed
-db.sequelize.sync().then(() => {
-    console.log('Database synced.');
-    // Ideally seed here if empty
-    require('./seed')(db);
-});
+// Export app for Vercel/Testing
+module.exports = app;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-});
+// Only listen if run directly (not imported as module)
+if (require.main === module) {
+    // Sync Database and Seed
+    db.sequelize.sync().then(() => {
+        console.log('Database synced.');
+        require('./seed')(db);
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}.`);
+        });
+    });
+}
