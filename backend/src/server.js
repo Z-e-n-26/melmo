@@ -20,6 +20,19 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/stock', stockRoutes);
 
+// Database Init Route for Vercel
+app.get('/api/init', async (req, res) => {
+    try {
+        await db.sequelize.sync({ alter: true }); // Sync tables
+        const seed = require('./seed');
+        await seed(db); // Run seeders
+        res.json({ message: 'Database initialized and seeded successfully.' });
+    } catch (error) {
+        console.error('Init Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Export app for Vercel/Testing
 module.exports = app;
 
